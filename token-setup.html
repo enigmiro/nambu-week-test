@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>토큰 설정 도우미</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
+<style>
+  :root{
+    --navy:#22344a; --navy-deep:#141f2c; --paper:#faf7f0; --line:#ddd6c6; --line-strong:#b6ab93;
+    --ink:#1f1c17; --ink-soft:#726a58; --red:#af4327; --green:#20522f; --amber:#7a5a0c;
+    --font-sans:'Pretendard Variable','Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:#e9e5d8; font-family:var(--font-sans); color:var(--ink); padding:28px 16px 60px; line-height:1.6;}
+  .sheet{max-width:760px; margin:0 auto; background:var(--paper); border:1px solid var(--line-strong); padding:30px 32px 36px;}
+  h1{font-size:24px; margin:0 0 4px; color:var(--navy-deep);}
+  .lead{color:var(--ink-soft); font-size:13.5px; margin:0 0 22px;}
+  h2{font-size:16px; margin:28px 0 10px; color:var(--navy-deep); padding-bottom:6px; border-bottom:1px solid var(--line);}
+  ol.steps{padding-left:20px; margin:0; font-size:13.5px;}
+  ol.steps li{margin-bottom:6px;}
+  .card{background:#fff; border:1px solid var(--line); border-radius:8px; padding:16px 18px; margin-bottom:14px;}
+  .card h3{margin:0 0 2px; font-size:15px;}
+  .card .sub{font-size:12.5px; color:var(--ink-soft); margin-bottom:12px;}
+  label{display:block; font-size:12px; color:var(--ink-soft); margin:10px 0 3px;}
+  input[type=text], input[type=password]{width:100%; font:inherit; font-size:15px; padding:8px 10px; border:1px solid var(--line-strong); border-radius:5px; background:#fff;}
+  .row{display:flex; gap:10px;} .row > div{flex:1;}
+  .btn{font:inherit; font-size:13px; font-weight:600; border:1px solid var(--line-strong); background:#fff; color:var(--ink); padding:8px 14px; border-radius:6px; cursor:pointer;}
+  .btn:hover{background:#f3efe3;}
+  .btn.primary{background:var(--navy); border-color:var(--navy); color:#fff;}
+  .btn.primary:hover{background:var(--navy-deep);}
+  .btn:disabled{opacity:.45; cursor:default;}
+  a.btnlink{display:inline-block; text-decoration:none; margin:4px 6px 4px 0;}
+  .msg{font-size:13px; margin:6px 0 0; white-space:pre-line;}
+  .msg.ok{color:var(--green);} .msg.err{color:var(--red);} .msg.warn{color:var(--amber);}
+  .checks{list-style:none; padding:0; margin:10px 0 0; font-size:13px;}
+  .checks li{padding:3px 0;}
+  .checks li.ok::before{content:"✓ "; color:var(--green); font-weight:700;}
+  .checks li.err::before{content:"✕ "; color:var(--red); font-weight:700;}
+  .checks li.warn::before{content:"! "; color:var(--amber); font-weight:700;}
+  textarea{width:100%; font-family:Consolas,monospace; font-size:12px; padding:10px; border:1px solid var(--line-strong); border-radius:5px; min-height:120px; background:#fbfaf6;}
+  .note{font-size:12.5px; color:var(--ink-soft); background:#f3efe3; border-radius:6px; padding:10px 12px; margin-top:10px;}
+  code{background:#efe9da; padding:1px 5px; border-radius:3px; font-size:12.5px;}
+  @media (max-width:560px){ .sheet{padding:20px 16px;} .row{flex-direction:column; gap:0;} }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <h1>토큰 설정 도우미</h1>
+  <p class="lead">주간 일정표의 열람용·편집용 토큰을 분리해 암호화하고, index.html에 바로 반영합니다. 모든 처리는 이 브라우저 안에서만 이루어지며 토큰과 암호는 어디에도 전송·저장되지 않습니다(토큰 점검 시 GitHub에만 요청).</p>
+
+  <h2>1단계 · GitHub에서 토큰 두 개 만들기</h2>
+  <ol class="steps">
+    <li>아래 버튼을 누르면 이름·만료일·권한이 미리 채워진 토큰 생성 화면이 열립니다.</li>
+    <li><b>Repository access</b>에서 <b>Only select repositories</b>를 고르고 <code>nambu-week</code>만 선택합니다. (이 항목은 직접 골라야 합니다)</li>
+    <li><b>Permissions → Repository permissions → Contents</b>가 열람용은 <b>Read-only</b>, 편집용은 <b>Read and write</b>인지 확인합니다.</li>
+    <li>맨 아래 <b>Generate token</b>을 누르고, 나온 토큰(<code>github_pat_</code>로 시작)을 바로 아래 칸에 붙여넣습니다. 토큰은 이 화면에서 한 번만 보입니다.</li>
+  </ol>
+  <div style="margin-top:10px;">
+    <a class="btn primary btnlink" target="_blank" rel="noopener"
+       href="https://github.com/settings/personal-access-tokens/new?name=nambu-week+viewer&description=%EC%A3%BC%EA%B0%84%EC%9D%BC%EC%A0%95%ED%91%9C+%EC%97%B4%EB%9E%8C%EC%9A%A9+(contents:read)&target_name=enigmiro&expires_in=366&contents=read">열람용 토큰 만들기 (Read-only)</a>
+    <a class="btn primary btnlink" target="_blank" rel="noopener"
+       href="https://github.com/settings/personal-access-tokens/new?name=nambu-week+editor&description=%EC%A3%BC%EA%B0%84%EC%9D%BC%EC%A0%95%ED%91%9C+%ED%8E%B8%EC%A7%91%EC%9A%A9+(contents:write)&target_name=enigmiro&expires_in=366&contents=write">편집용 토큰 만들기 (Read and write)</a>
+  </div>
+
+  <h2>2단계 · 토큰과 암호 입력</h2>
+  <div class="card">
+    <h3>열람용 ("일정표 접속")</h3>
+    <div class="sub">직원들에게 알려줄 접속 암호입니다. 이 암호로는 일정을 볼 수만 있습니다.</div>
+    <label>열람용 토큰 (Contents: Read-only)</label>
+    <input type="password" id="viewToken" placeholder="github_pat_..." autocomplete="off">
+    <div class="row">
+      <div><label>접속 암호</label><input type="password" id="viewPass" autocomplete="new-password"></div>
+      <div><label>접속 암호 확인</label><input type="password" id="viewPass2" autocomplete="new-password"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>편집용 ("편집하기")</h3>
+    <div class="sub">편집 담당자만 아는 비밀번호입니다. 접속 암호와 다르게 정하세요.</div>
+    <label>편집용 토큰 (Contents: Read and write)</label>
+    <input type="password" id="editToken" placeholder="github_pat_..." autocomplete="off">
+    <div class="row">
+      <div><label>편집 비밀번호</label><input type="password" id="editPass" autocomplete="new-password"></div>
+      <div><label>편집 비밀번호 확인</label><input type="password" id="editPass2" autocomplete="new-password"></div>
+    </div>
+  </div>
+
+  <button class="btn" id="checkBtn">입력값 점검하기</button>
+  <ul class="checks" id="checkList"></ul>
+
+  <h2>3단계 · 암호화하고 index.html에 반영</h2>
+  <p style="font-size:13.5px; margin:0 0 8px;">지금 쓰고 있는 index.html을 선택하면, 두 암호화 값만 바꾼 새 index.html을 내려받을 수 있습니다. 다른 내용은 그대로 유지됩니다.</p>
+  <input type="file" id="indexFile" accept=".html,text/html">
+  <div style="margin-top:12px;">
+    <button class="btn primary" id="buildBtn">암호화하고 새 index.html 내려받기</button>
+    <button class="btn" id="encOnlyBtn">암호화 값만 보기</button>
+  </div>
+  <p class="msg" id="buildMsg"></p>
+  <textarea id="output" readonly style="display:none;"></textarea>
+
+  <h2>4단계 · 마무리</h2>
+  <ol class="steps">
+    <li>내려받은 index.html을 GitHub 저장소의 기존 index.html 자리에 올립니다(덮어쓰기).</li>
+    <li>GitHub → Settings → Developer settings → Personal access tokens에서 <b>예전 토큰을 Delete</b>합니다. <b>Tokens (classic)</b> 목록도 꼭 확인하세요.</li>
+    <li>각 PC에서 일정표를 열어 "일정표 해제"를 한 번 누르고 새 암호로 다시 접속합니다.</li>
+    <li>편집하기로 들어갔을 때 "토큰이 같습니다" 경고가 더 이상 뜨지 않으면 완료입니다.</li>
+  </ol>
+  <div class="note">이 도우미 파일은 비밀 정보를 담고 있지 않지만, 저장소에 올릴 필요는 없습니다. 내 PC에서 열어 쓰면 됩니다.</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const OWNER = "enigmiro", REPO = "nambu-week";
+  const $ = id => document.getElementById(id);
+
+  // ---- 암호화: index.html의 decryptToken()과 같은 방식 (PBKDF2-SHA256 150,000회 → AES-GCM 256) ----
+  function bufToB64(buf){ let s=""; new Uint8Array(buf).forEach(b=> s+=String.fromCharCode(b)); return btoa(s); }
+  function b64ToBuf(b64){ return Uint8Array.from(atob(b64), c=>c.charCodeAt(0)); }
+  async function deriveKey(pass, salt, usage){
+    const km = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), {name:"PBKDF2"}, false, ["deriveKey"]);
+    return crypto.subtle.deriveKey({name:"PBKDF2", salt, iterations:150000, hash:"SHA-256"}, km, {name:"AES-GCM", length:256}, false, [usage]);
+  }
+  async function encryptToken(token, pass){
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const key = await deriveKey(pass, salt, "encrypt");
+    const data = await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, new TextEncoder().encode(token));
+    return {salt: bufToB64(salt), iv: bufToB64(iv), data: bufToB64(data)};
+  }
+  async function decryptToken(enc, pass){
+    const key = await deriveKey(pass, b64ToBuf(enc.salt), "decrypt");
+    const plain = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64ToBuf(enc.iv)}, key, b64ToBuf(enc.data));
+    return new TextDecoder().decode(plain);
+  }
+
+  // ---- 입력값 점검 ----
+  function v(id){ return $(id).value.trim(); }
+  function localChecks(){
+    const out = []; // [level, text]
+    const vt=v("viewToken"), et=v("editToken"), vp=$("viewPass").value, ep=$("editPass").value;
+    if(!vt || !et) out.push(["err","토큰 두 개를 모두 입력하세요."]);
+    if(vt && et && vt===et) out.push(["err","열람용과 편집용 토큰이 같습니다. 서로 다른 토큰을 만들어 넣어야 권한이 분리됩니다."]);
+    [["열람용",vt],["편집용",et]].forEach(([n,t])=>{
+      if(!t) return;
+      if(/^ghp_/.test(t)) out.push(["err",`${n} 토큰이 예전 방식(Tokens classic, ghp_…)입니다. 모든 저장소에 접근할 수 있어 위험하니 1단계 버튼으로 Fine-grained 토큰을 새로 만드세요.`]);
+      else if(!/^github_pat_/.test(t)) out.push(["warn",`${n} 토큰 형식이 Fine-grained(github_pat_…)가 아닌 것 같습니다. 붙여넣기가 잘렸는지 확인하세요.`]);
+    });
+    if(!vp || !ep) out.push(["err","접속 암호와 편집 비밀번호를 모두 입력하세요."]);
+    if(vp && vp!==$("viewPass2").value) out.push(["err","접속 암호 확인이 일치하지 않습니다."]);
+    if(ep && ep!==$("editPass2").value) out.push(["err","편집 비밀번호 확인이 일치하지 않습니다."]);
+    if(vp && ep && vp===ep) out.push(["err","접속 암호와 편집 비밀번호가 같습니다. 다르게 정하세요."]);
+    [["접속 암호",vp],["편집 비밀번호",ep]].forEach(([n,p])=>{
+      if(p && p.length<8) out.push(["warn",`${n}가 짧습니다(${p.length}자). 암호화 값이 파일에 공개되어 있으므로 8자 이상을 권장합니다.`]);
+    });
+    return out;
+  }
+
+  // 토큰으로 저장소에 접근되는지, 만료일은 언제인지 GitHub에 확인 (읽기 요청만 보냄 — 아무것도 바꾸지 않음)
+  async function remoteCheck(label, token){
+    try{
+      const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}`, {headers:{"Authorization":`token ${token}`,"Accept":"application/vnd.github+json"}, cache:"no-store"});
+      const exp = res.headers.get("github-authentication-token-expiration");
+      if(res.status===401) return ["err",`${label} 토큰: 유효하지 않은 토큰입니다(복사가 잘렸거나 이미 삭제된 토큰).`];
+      if(res.status===403 || res.status===404) return ["err",`${label} 토큰: ${REPO} 저장소에 접근할 수 없습니다. Repository access에서 ${REPO}를 선택했는지 확인하세요.`];
+      if(!res.ok) return ["warn",`${label} 토큰: 확인 중 오류(${res.status}). 잠시 후 다시 시도하세요.`];
+      const repo = await res.json().catch(()=>({}));
+      let msg = `${label} 토큰: ${REPO} 저장소 접근 확인됨`;
+      if(exp) msg += ` · 만료 ${exp.slice(0,10)}`;
+      if(repo && repo.private===false) return ["warn", msg + `\n단, 저장소가 Public입니다. 누구나 일정 파일을 볼 수 있으니 Private으로 바꾸세요.`];
+      return ["ok", msg];
+    }catch(e){
+      return ["warn",`${label} 토큰: GitHub에 연결하지 못했습니다(인터넷 연결 확인). 이 점검은 건너뛰어도 됩니다.`];
+    }
+  }
+
+  function showChecks(list){
+    const ul = $("checkList"); ul.innerHTML = "";
+    list.forEach(([lvl,txt])=>{ const li=document.createElement("li"); li.className=lvl; li.textContent=txt; li.style.whiteSpace="pre-line"; ul.appendChild(li); });
+  }
+
+  async function runChecks(){
+    $("checkBtn").disabled = true;
+    const list = localChecks();
+    if(!list.some(c=>c[0]==="err")) list.push(["ok","입력값 형식 점검 통과"]);
+    showChecks([...list, ["warn","GitHub에서 토큰을 확인하는 중…"]]);
+    const vt=v("viewToken"), et=v("editToken");
+    if(vt) list.push(await remoteCheck("열람용", vt));
+    if(et && et!==vt) list.push(await remoteCheck("편집용", et));
+    list.push(["warn","쓰기 권한(Read-only / Read and write)은 GitHub 화면에서 직접 확인하세요. 실제 저장 없이는 자동으로 확인할 수 없습니다."]);
+    showChecks(list);
+    $("checkBtn").disabled = false;
+    return list;
+  }
+  $("checkBtn").addEventListener("click", runChecks);
+
+  // ---- 암호화 + index.html 반영 ----
+  async function buildEnc(){
+    const errs = localChecks().filter(c=>c[0]==="err");
+    if(errs.length){ showChecks(errs); throw new Error("입력값을 먼저 고쳐주세요(위 목록 참고)."); }
+    const viewEnc = await encryptToken(v("viewToken"), $("viewPass").value);
+    const editEnc = await encryptToken(v("editToken"), $("editPass").value);
+    // 바로 풀어보며 검증 (index.html이 실제로 푸는 것과 같은 과정)
+    if(await decryptToken(viewEnc, $("viewPass").value) !== v("viewToken")) throw new Error("열람용 암호화 검증 실패");
+    if(await decryptToken(editEnc, $("editPass").value) !== v("editToken")) throw new Error("편집용 암호화 검증 실패");
+    return {viewEnc, editEnc};
+  }
+
+  function patchIndex(html, viewEnc, editEnc){
+    const reView = /(const\s+GH_AUTO_CONFIG\s*=\s*\{[\s\S]*?enc\s*:\s*)\{[^{}]*\}/;
+    const reEdit = /(const\s+EDIT_AUTO_CONFIG\s*=\s*\{[\s\S]*?enc\s*:\s*)\{[^{}]*\}/;
+    if(!reView.test(html) || !reEdit.test(html)) throw new Error("선택한 파일에서 GH_AUTO_CONFIG / EDIT_AUTO_CONFIG를 찾지 못했습니다. 주간 일정표 index.html이 맞는지 확인하세요.");
+    return html.replace(reView, (m,p)=> p + JSON.stringify(viewEnc)).replace(reEdit, (m,p)=> p + JSON.stringify(editEnc));
+  }
+
+  function setMsg(text, cls){ const el=$("buildMsg"); el.textContent=text; el.className="msg "+(cls||""); }
+
+  $("buildBtn").addEventListener("click", async ()=>{
+    const file = $("indexFile").files[0];
+    if(!file){ setMsg("먼저 지금 쓰고 있는 index.html 파일을 선택하세요.","err"); return; }
+    $("buildBtn").disabled = true; setMsg("암호화하는 중…");
+    try{
+      const {viewEnc, editEnc} = await buildEnc();
+      const html = await file.text();
+      const patched = patchIndex(html, viewEnc, editEnc);
+      const url = URL.createObjectURL(new Blob([patched], {type:"text/html;charset=utf-8"}));
+      const a = document.createElement("a"); a.href=url; a.download="index.html"; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=> URL.revokeObjectURL(url), 2000);
+      setMsg("새 index.html을 내려받았습니다. 4단계대로 저장소에 올리고 예전 토큰을 삭제하세요.","ok");
+    }catch(e){ console.error(e); setMsg(e.message,"err"); }
+    finally{ $("buildBtn").disabled = false; }
+  });
+
+  $("encOnlyBtn").addEventListener("click", async ()=>{
+    setMsg("암호화하는 중…");
+    try{
+      const {viewEnc, editEnc} = await buildEnc();
+      const out = $("output");
+      out.style.display = "";
+      out.value =
+`// GH_AUTO_CONFIG 안의 enc: 자리에 (열람용)
+enc: ${JSON.stringify(viewEnc)}
+
+// EDIT_AUTO_CONFIG 안의 enc: 자리에 (편집용)
+enc: ${JSON.stringify(editEnc)}`;
+      setMsg("아래 값을 index.html의 해당 자리에 직접 붙여넣어도 됩니다.","ok");
+    }catch(e){ setMsg(e.message,"err"); }
+  });
+})();
+</script>
+</body>
+</html>
